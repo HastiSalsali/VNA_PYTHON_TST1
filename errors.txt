@@ -1,0 +1,57 @@
+PS C:\Users\Liquid group\Desktop\HS\VNA test 1> & "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\python.exe" "c:/Users/Liquid group/Desktop/HS/VNA test 
+1/main.py"
+VNA Test Menu
+  1) Run S11 sweep
+  2) Print connected devices
+Select an option: 1
+Traceback (most recent call last):
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\RsInstrument\Internal\VisaSession.py", line 224, in __init__
+    stb = self._read_stb()
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\RsInstrument\Internal\VisaSession.py", line 618, in _read_stb
+    return StatusByte(self._session.read_stb())
+                      ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pyvisa\resources\messagebased.py", line 836, in read_stb
+    value, _retcode = self.visalib.read_stb(self.session)
+                      ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pyvisa\ctwrapper\functions.py", line 2364, in read_stb
+    ret = library.viReadSTB(session, byref(status))
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 227, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pyvisa\highlevel.py", line 252, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_TMO (-1073807339): Timeout expired before operation completed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Liquid group\Desktop\HS\VNA test 1\main.py", line 88, in <module>
+    main()
+    ~~~~^^
+  File "c:\Users\Liquid group\Desktop\HS\VNA test 1\main.py", line 80, in main
+    run_s11_sweep()
+    ~~~~~~~~~~~~~^^
+  File "c:\Users\Liquid group\Desktop\HS\VNA test 1\main.py", line 14, in run_s11_sweep
+    vna = VNA(RESOURCE_STRING)
+  File "c:\Users\Liquid group\Desktop\HS\VNA test 1\instruments\vna.py", line 8, in __init__
+    self.inst = RsInstrument(resource_string, id_query=False, reset=False)
+                ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\RsInstrument\RsInstrument.py", line 85, in __init__
+    self._core = Core(
+                 ~~~~^
+        resource_name,
+     ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        direct_session=direct_session,
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        called_from_driver=False)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\RsInstrument\Internal\Core.py", line 303, in __init__
+    self.io = Instrument(self.resource_name, self.simulating, self._instrumentSettings, handle)
+              ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\RsInstrument\Internal\Instrument.py", line 96, in __init__
+    self._set_session(VisaSession(resource_name, self._settings, direct_session))
+                      ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Liquid group\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\RsInstrument\Internal\VisaSession.py", line 227, in __init__
+    raise RsInstrException(msg)
+RsInstrument.Internal.InstrumentErrors.RsInstrException: Operation Read STB: Timeout expired before operation completed.
