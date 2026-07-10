@@ -104,6 +104,7 @@ class VNA:
         if getattr(self, 'inst', None) is not None:
             try:
                 self.inst.close()
+                print("closed session\n")
             except Exception:
                 pass
             finally:

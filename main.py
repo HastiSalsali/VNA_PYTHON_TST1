@@ -13,9 +13,9 @@ def run_s11_sweep():
 
         elapsed_times, s11_values = vna.measure_sparam_cw_over_time(
             'S11',
-            freq_hz=1.9e9,
-            num_points=200,
-            power_dbm=0,
+            freq_hz=1.2e9,
+            num_points=1000,
+            power_dbm=-10,
             if_bandwidth_hz=10000,
         )
 
