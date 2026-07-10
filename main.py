@@ -8,13 +8,8 @@ RESOURCE_STRING = 'USB0::0x0AAD::0x0198::101157::INSTR'  # replace
 
 
 def run_s11_sweep():
-    vna = None
-
-    try:
-        vna = VNA(RESOURCE_STRING)
-
+    with VNA(RESOURCE_STRING) as vna:
         print(vna.identify())
-
 
         elapsed_times, s11_values = vna.measure_sparam_cw_over_time(
             'S11',
@@ -23,10 +18,6 @@ def run_s11_sweep():
             power_dbm=0,
             if_bandwidth_hz=10000,
         )
-        
-    finally:
-        if vna is not None:
-            vna.close()
 
     s11_values = np.array(s11_values)
     s11_magnitudes = np.abs(s11_values)
@@ -76,12 +67,15 @@ def main():
     print('  2) Print connected devices')
     choice = input('Select an option: ').strip()
 
-    if choice == '1':
-        run_s11_sweep()
-    elif choice == '2':
-        print_devices()
-    else:
-        print(f'Invalid option: {choice!r}')
+    try:
+        if choice == '1':
+            run_s11_sweep()
+        elif choice == '2':
+            print_devices()
+        else:
+            print(f'Invalid option: {choice!r}')
+    except Exception as e:
+        print(f'Error: {e}')
 
 
 if __name__ == '__main__':

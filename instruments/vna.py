@@ -1,3 +1,5 @@
+import pyvisa
+
 from RsInstrument import RsInstrument
 from instruments.base_instrument import BaseInstrument
 
@@ -5,9 +7,29 @@ VNA_NAME = 'ZNA26'
 
 class VNA:
     def __init__(self, resource_string, timeout_ms=10000):
+        self.inst = None
+        self._clear_stale_session(resource_string)
         self.inst = RsInstrument(resource_string, id_query=False, reset=False)
         self.inst.visa_timeout = timeout_ms
         self.inst.instrument_status_checking = True
+
+    @staticmethod
+    def _clear_stale_session(resource_string, timeout_ms=5000):
+        # Resets any USBTMC/VISA session left stuck by a previous run that
+        # crashed or was killed before close() ran, which otherwise causes
+        # RsInstrument's initial status-byte read to time out.
+        rm = pyvisa.ResourceManager()
+        try:
+            raw = rm.open_resource(resource_string)
+            try:
+                raw.timeout = timeout_ms
+                raw.clear()
+            finally:
+                raw.close()
+        except pyvisa.VisaIOError:
+            pass
+        finally:
+            rm.close()
 
     # override base methods to use RsInstrument's API
     def reset(self):
@@ -79,7 +101,13 @@ class VNA:
         return elapsed_times, sparam_values
     
     def close(self):
-        self.inst.close()
+        if getattr(self, 'inst', None) is not None:
+            try:
+                self.inst.close()
+            except Exception:
+                pass
+            finally:
+                self.inst = None
     
     def __enter__(self):
         return self
